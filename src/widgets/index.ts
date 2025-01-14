@@ -1,4 +1,8 @@
-export { default as Widget } from './Widget';
+import Widget from './Widget';
+import type { WidgetProps } from './Widget';
+import { useWidgetState } from './Widget';
+
+export { Widget, WidgetProps, useWidgetState };
 
 export { default as Calendar } from './Calendar';
 export { default as Checkbox } from './Checkbox';

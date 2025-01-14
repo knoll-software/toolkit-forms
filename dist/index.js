@@ -23839,5 +23839,6 @@ export {
   pn as setNativeInputValue,
   Bv as setNativeSelectValue,
   xB as setNativeTextareaValue,
-  Ti as useFormContext
+  Ti as useFormContext,
+  Xt as useWidgetState
 };

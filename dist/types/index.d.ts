@@ -284,6 +284,8 @@ export declare const ToggleButton: ({ options, name, className, disabled, requir
 
 export { useFormContext }
 
+export declare const useWidgetState: <T, K>(initialValue?: T, controlledValue?: T, onChange?: (event: React_2.ChangeEvent<K>) => void) => [T, (event: React_2.ChangeEvent<K>) => void];
+
 export declare const Widget: (({ asChild, className, disabled, ref, variant, checked, ...props }: WidgetRootProps & Slottable_2) => JSX_2.Element) & {
     Content: ({ asChild, className, ...props }: WidgetContentProps & Slottable_2) => JSX_2.Element;
     Controls: ({ asChild, className, children, ...props }: WidgetControlsProps & Slottable_2) => JSX_2.Element | null;
@@ -304,7 +306,7 @@ declare interface WidgetNativeProps extends React_2.ComponentPropsWithRef<'div'>
     variant?: 'hidden' | 'inset';
 }
 
-declare interface WidgetProps {
+export declare interface WidgetProps {
     controls?: React_2.ReactNode;
     widgetRef?: (node: any) => void;
 }

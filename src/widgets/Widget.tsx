@@ -72,7 +72,7 @@ const WidgetRoot = ({
                         ),
                     variant === 'button' &&
                         classnames(
-                            'shadow-sm',
+                            'shadow-sm flex gap-1 justify-between w-full group rounded',
                             !disabled && 'hover:bg-neutral-100',
                             !disabled && 'active:bg-neutral-200',
                             !disabled && 'ui-state-open:bg-neutral-200 ui-state-open:shadow-inner-sm',

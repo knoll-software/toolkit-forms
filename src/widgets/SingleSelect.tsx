@@ -181,7 +181,7 @@ export const SingleSelect = ({
                             variant="button"
                             disabled={selectProps.disabled}
                             ref={widgetRef}
-                            className={classnames('flex gap-1 justify-between w-full group rounded', className)}
+                            className={className}
                         >
                             <Widget.Content asChild>
                                 <button

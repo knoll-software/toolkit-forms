@@ -7250,7 +7250,7 @@ const nd = (e) => e.type === "select-multiple", Lv = J.createContext({}), GS = (
           n && "group-ui-state-checked:bg-neutral-400"
         ),
         a === "button" && Pe(
-          "shadow-sm",
+          "shadow-sm flex gap-1 justify-between w-full group rounded",
           !n && "hover:bg-neutral-100",
           !n && "active:bg-neutral-200",
           !n && "ui-state-open:bg-neutral-200 ui-state-open:shadow-inner-sm",
@@ -16918,7 +16918,7 @@ const ub = /* @__PURE__ */ Qs(K4), Xr = J.createContext(void 0), G4 = ({
             variant: "button",
             disabled: C.disabled,
             ref: e,
-            className: Pe("flex gap-1 justify-between w-full group rounded", S),
+            className: S,
             children: [
               /* @__PURE__ */ v.jsx(ke.Content, { asChild: !0, children: /* @__PURE__ */ v.jsx(
                 "button",
@@ -19353,7 +19353,7 @@ const D3 = (e) => e instanceof Date ? e : Lb(e), k3 = (e) => {
         {
           variant: "button",
           disabled: d,
-          className: Pe("flex gap-1 justify-between w-full group rounded", n),
+          className: n,
           children: [
             /* @__PURE__ */ v.jsx(
               ke.Content,
@@ -19749,7 +19749,7 @@ const D3 = (e) => e instanceof Date ? e : Lb(e), k3 = (e) => {
         {
           variant: "button",
           disabled: d,
-          className: Pe("flex gap-1 justify-between w-full group rounded", n),
+          className: n,
           children: [
             /* @__PURE__ */ v.jsx(
               ke.Content,

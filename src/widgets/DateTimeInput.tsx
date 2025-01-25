@@ -135,7 +135,7 @@ const DateTimeInput = ({
                     <Widget
                         variant="button"
                         disabled={disabled}
-                        className={classnames('flex gap-1 justify-between w-full group rounded', className)}
+                        className={className}
                     >
                         <Widget.Content
                             className="ui-placeholder:text-neutral-400 ui-placeholder:font-normal"

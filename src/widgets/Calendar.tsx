@@ -7,11 +7,13 @@ import SingleSelect from './SingleSelect.tsx';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const mergeClassNames = (classNames: Record<string, string>, defaultClassNames: Record<string, string>) => {
-    // merge by key and use classnames() function
-    return Object.keys(defaultClassNames).reduce((acc: Record<string, string>, key) => {
-        acc[key] = classnames(defaultClassNames[key], classNames[key]);
-        return acc;
+const mergeClassNames = (defaultClassNames: Record<string, string>, classNames: Record<string, string>) => {
+    // merge by key and use classnames() function, add additional keys
+    return Object.keys({ ...defaultClassNames, ...classNames }).reduce((acc, key) => {
+        return {
+            ...acc,
+            [key]: classnames(defaultClassNames[key], classNames[key]),
+        };
     }, {});
 }
 

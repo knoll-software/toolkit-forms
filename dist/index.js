@@ -17034,7 +17034,10 @@ const cb = /* @__PURE__ */ Qs(G4), Xr = J.createContext(void 0), X4 = ({
       ]
     }
   ) });
-}, Sg = (e, t) => Object.keys(t).reduce((n, r) => (n[r] = Pe(t[r], e[r]), n), {}), fb = ({
+}, Sg = (e, t) => Object.keys({ ...e, ...t }).reduce((n, r) => ({
+  ...n,
+  [r]: Pe(e[r], t[r])
+}), {}), fb = ({
   className: e,
   classNames: t = {},
   showOutsideDays: n = !0,

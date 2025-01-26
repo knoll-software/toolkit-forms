@@ -64,7 +64,7 @@ const CheckboxGroup = ({
             onSelectedChange={onSelectedChange}
             disabled={selectProps.disabled}
             multiple
-            open={true}
+            open={true || open}
             onOpenChange={setOpen}
             className="relative"
         >

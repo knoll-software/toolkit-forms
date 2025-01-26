@@ -7,18 +7,29 @@ import SingleSelect from './SingleSelect.tsx';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
+const mergeClassNames = (classNames: Record<string, string>, defaultClassNames: Record<string, string>) => {
+    // merge by key and use classnames() function
+    return Object.keys(defaultClassNames).reduce((acc: Record<string, string>, key) => {
+        acc[key] = classnames(defaultClassNames[key], classNames[key]);
+        return acc;
+    }, {});
+}
+
 const Calendar = ({
     className,
-    classNames,
+    classNames = {},
     showOutsideDays = true,
     modifiers = {},
     modifiersClassNames = {},
     ...props
 }: CalendarProps) => {
     // highlight weekend days
-    const customModifiers = {
+    const defaultModifiers = {
         weekend: { dayOfWeek: [0, 6] },
     };
+    const defaultModifiersClassNames = {
+        highlighted: 'bg-theme-100'
+    }
 
     return (
         <DayPicker
@@ -26,10 +37,10 @@ const Calendar = ({
             captionLayout="dropdown-buttons"
             showOutsideDays={showOutsideDays}
             weekStartsOn={1}
-            modifiersClassNames={{ ...modifiersClassNames }}
-            modifiers={{ ...customModifiers, ...modifiers }}
+            modifiersClassNames={mergeClassNames(defaultModifiersClassNames, modifiersClassNames)}
+            modifiers={{ ...defaultModifiers, ...modifiers }}
             className={classnames('p-3', className)}
-            classNames={{
+            classNames={mergeClassNames({
                 months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
                 month: 'space-y-4',
                 caption: 'flex justify-center pt-1 relative items-center',
@@ -45,9 +56,9 @@ const Calendar = ({
                 head_cell: 'text-neutral-500 rounded-md w-9 font-normal text-[0.8rem]',
                 row: 'flex w-full',
                 cell: 'text-center text-sm p-0 relative [&:has([aria-selected])]:bg-neutral-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-                day: 'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-100 hover:text-neutral-800 h-9 w-9 p-0 font-normal aria-selected:opacity-100',
+                day: 'm-px inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-100 hover:text-neutral-800 h-9 w-9 p-0 font-normal aria-selected:opacity-100',
                 day_selected:
-                    'bg-theme-600 !text-white hover:bg-theme-600 hover:text-white focus:bg-theme-600 focus:text-white rounded-md',
+                    '!bg-theme-600 !text-white hover:!bg-theme-600 hover:!text-white focus:!bg-theme-600 focus:!text-white rounded-md',
                 day_today: 'text-theme-600 rounded-md underline decoration-2 underline-offset-4',
                 day_outside: 'text-neutral-500 opacity-50',
                 day_disabled: 'text-neutral-500 opacity-50',
@@ -56,8 +67,7 @@ const Calendar = ({
                 day_range_end: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-r-md',
                 day_hidden: 'invisible',
                 vhidden: 'hidden',
-                ...classNames,
-            }}
+            }, classNames)}
             components={{
                 IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
                 IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,

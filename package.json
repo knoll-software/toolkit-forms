@@ -20,6 +20,7 @@
     "react-dom": ">=19.0.0 <20.0.0-0"
   },
   "dependencies": {
+    "@nicoknoll/forms": "github:knoll-software/toolkit-forms",
     "@nicoknoll/utils": "github:knoll-software/toolkit-utils",
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",

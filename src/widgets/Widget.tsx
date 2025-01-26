@@ -61,7 +61,7 @@ const WidgetRoot = ({
                     disabled && 'bg-neutral-100 shadow-none',
 
                     // variants
-                    variant === 'input' && classnames('flex w-full rounded'),
+                    variant === 'input' && 'flex w-full rounded',
                     variant === 'checkable' &&
                         classnames(
                             checked && !disabled && 'bg-theme-600 !border-transparent',

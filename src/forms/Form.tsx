@@ -32,6 +32,8 @@ const Form = <TFieldValues extends FieldValues = FieldValues>({
     const methods = formMethods || useForm<TFieldValues>();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
         onIsSubmittingChange?.(true);
         const result = await Promise.resolve(methods.handleSubmit(onSubmit)(event));
         onIsSubmittingChange?.(false);

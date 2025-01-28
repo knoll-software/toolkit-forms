@@ -23387,7 +23387,7 @@ const uB = ({
   ...a
 }) => {
   const o = n || lB(), l = async (u) => {
-    r == null || r(!0);
+    u.preventDefault(), u.stopPropagation(), r == null || r(!0);
     const d = await Promise.resolve(o.handleSubmit(t)(u));
     return r == null || r(!1), d;
   };

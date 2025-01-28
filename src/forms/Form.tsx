@@ -137,4 +137,4 @@ export default Object.assign(Form, {
     ErrorMessage: FormErrorMessage,
 });
 
-export { useFormContext } from 'react-hook-form';
+export { useFormContext, FormProvider } from 'react-hook-form';

@@ -2,6 +2,7 @@ import { ControllerProps } from 'react-hook-form';
 import { DayPicker } from 'react-day-picker';
 import { default as default_2 } from 'react';
 import { FieldValues } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
 import * as React_2 from 'react';
 import { SubmitHandler } from 'react-hook-form';
@@ -153,6 +154,8 @@ declare interface FormProps<TFieldValues extends FieldValues = FieldValues> exte
     formMethods?: UseFormReturn<TFieldValues>;
     onIsSubmittingChange?: (isSubmitting: boolean) => void;
 }
+
+export { FormProvider }
 
 export declare const getNativeSelectValue: (select: HTMLSelectElement) => string | string[];
 

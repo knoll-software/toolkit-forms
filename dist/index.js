@@ -16804,9 +16804,9 @@ const cb = /* @__PURE__ */ Qs(G4), Xr = J.createContext(void 0), X4 = ({
   };
 }, uW = ({ ref: e, ...t }) => {
   const n = qe(null), { multiple: r, options: a, selected: o, required: l } = Yt(Xr);
-  return console.warn(o), /* @__PURE__ */ v.jsxs("select", { ...t, tabIndex: -1, multiple: r, ref: nn(n, e), children: [
+  return /* @__PURE__ */ v.jsxs("select", { ...t, tabIndex: -1, multiple: r, ref: nn(n, e), children: [
     !l && /* @__PURE__ */ v.jsx("option", { value: "", disabled: !1 }),
-    o == null ? void 0 : o.map((u) => /* @__PURE__ */ v.jsx("option", { value: u, selected: !0, children: u }, u)),
+    o && (Array.isArray(o) ? o : [o]).map((u) => /* @__PURE__ */ v.jsx("option", { value: u, selected: !0, children: u }, u)),
     a == null ? void 0 : a.filter((u) => !o.includes(u.value)).map((u) => {
       const d = typeof u.label == "string" ? u.label : Sv(u.label || "");
       return /* @__PURE__ */ v.jsx("option", { value: u.value, children: d }, u.value);

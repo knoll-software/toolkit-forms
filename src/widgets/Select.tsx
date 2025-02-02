@@ -724,13 +724,12 @@ const SelectNative = ({ ref, ...props }: SelectNativeProps) => {
     const nativeRef = useRef<HTMLSelectElement>(null);
 
     const { multiple, options, selected, required } = useContext(SelectContext)!;
-    console.warn(selected);
 
     return (
         <select {...props} tabIndex={-1} multiple={multiple} ref={mergeRefs(nativeRef, ref)}>
             {!required && <option value="" disabled={false} />}
 
-            {selected?.map((selectedValue: string) => {
+            {selected && (Array.isArray(selected) ? selected : [selected]).map((selectedValue: string) => {
                 return (
                     <option key={selectedValue} value={selectedValue} selected>
                         {selectedValue}

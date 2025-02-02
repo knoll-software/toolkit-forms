@@ -16676,7 +16676,7 @@ const cb = /* @__PURE__ */ Qs(G4), Xr = J.createContext(void 0), X4 = ({
     p
   ), [te, R] = Ki(x ?? !1, b, O), [B, z] = ht([]), [U, K] = ht([]);
   zr(() => {
-    (te || g || B) && K(B);
+    (te || g || B.length > 0) && K(B);
   }, [te, B]), zr(() => {
     C && U.length > 0 && ee === "" && ne(U[0].value);
   }, [U == null ? void 0 : U.length]);

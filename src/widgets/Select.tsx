@@ -379,7 +379,7 @@ const SelectRoot = <T extends string | string[]>({
     const [options, setOptions] = useState<Option[]>([]);
 
     useLayoutEffect(() => {
-        if (open || forceMount || registeredOptions) {
+        if (open || forceMount || registeredOptions.length > 0) {
             setOptions(registeredOptions);
         }
     }, [open, registeredOptions]);

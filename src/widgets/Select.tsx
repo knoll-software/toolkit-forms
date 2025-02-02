@@ -724,6 +724,7 @@ const SelectNative = ({ ref, ...props }: SelectNativeProps) => {
     const nativeRef = useRef<HTMLSelectElement>(null);
 
     const { multiple, options, selected, required } = useContext(SelectContext)!;
+    console.warn(selected);
 
     return (
         <select {...props} tabIndex={-1} multiple={multiple} ref={mergeRefs(nativeRef, ref)}>

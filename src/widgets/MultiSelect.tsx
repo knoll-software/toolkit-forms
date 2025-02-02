@@ -173,6 +173,7 @@ const MultiSelect = ({
                 disabled={selectProps.disabled}
                 multiple
                 highlightOnMouseOver
+                className="relative"
             >
                 <Popover.Anchor>
                     <Select.Trigger

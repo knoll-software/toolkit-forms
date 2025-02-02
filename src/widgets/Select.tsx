@@ -723,20 +723,31 @@ interface SelectNativeProps extends Omit<React.ComponentPropsWithRef<'select'>, 
 const SelectNative = ({ ref, ...props }: SelectNativeProps) => {
     const nativeRef = useRef<HTMLSelectElement>(null);
 
-    const { multiple, options, required } = useContext(SelectContext)!;
+    const { multiple, options, selected, required } = useContext(SelectContext)!;
 
     return (
         <select {...props} tabIndex={-1} multiple={multiple} ref={mergeRefs(nativeRef, ref)}>
             {!required && <option value="" disabled={false} />}
 
-            {options?.map((option) => {
-                const textLabel = typeof option.label === 'string' ? option.label : renderToString(option.label || '');
+            {selected?.map((selectedValue: string) => {
                 return (
-                    <option key={option.value} value={option.value}>
-                        {textLabel}
+                    <option key={selectedValue} value={selectedValue} selected>
+                        {selectedValue}
                     </option>
                 );
             })}
+
+            {options
+                ?.filter((o) => !selected.includes(o.value))
+                .map((option) => {
+                    const textLabel =
+                        typeof option.label === 'string' ? option.label : renderToString(option.label || '');
+                    return (
+                        <option key={option.value} value={option.value}>
+                            {textLabel}
+                        </option>
+                    );
+                })}
         </select>
     );
 };

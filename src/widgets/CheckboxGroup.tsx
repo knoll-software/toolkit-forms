@@ -48,7 +48,7 @@ const CheckboxGroup = ({
     // TODO: figure out wtf I added this whole open stuff here ?
 
     const triggerRef = React.useRef<HTMLButtonElement>(null);
-    const [open, setOpen] = useState<boolean | undefined>(true);
+    const [open, setOpen] = useState<boolean | undefined>(false);
 
     const [value, onChange] = useWidgetState([], propsValue, propsOnChange);
 
@@ -64,7 +64,7 @@ const CheckboxGroup = ({
             onSelectedChange={onSelectedChange}
             disabled={selectProps.disabled}
             multiple
-            open={true || open}
+            open={open}
             onOpenChange={setOpen}
             className="relative"
         >

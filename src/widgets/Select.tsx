@@ -379,7 +379,7 @@ const SelectRoot = <T extends string | string[]>({
     const [options, setOptions] = useState<Option[]>([]);
 
     useLayoutEffect(() => {
-        if (open || forceMount) {
+        if (open || forceMount || registeredOptions) {
             setOptions(registeredOptions);
         }
     }, [open, registeredOptions]);
@@ -623,6 +623,7 @@ const SelectOption = ({ asChild, value, disabled, index = undefined, ...props }:
     }, [value, text, disabled, index]);
 
     const optionIndex = filteredOptions?.findIndex((option) => option.value === value);
+
     const option = optionIndex !== undefined && optionIndex > -1 ? filteredOptions?.[optionIndex] : undefined;
     const isSelected = selectedOptions?.some((selectedOption) => selectedOption.value === value);
 

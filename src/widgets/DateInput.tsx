@@ -72,7 +72,7 @@ const DateInput = ({
         setIsPopoverOpen(open);
 
         if (!open) {
-            triggerRef.current?.focus();
+            setTimeout(() => nativeRef.current?.focus(), 0);
         }
     };
 
@@ -80,9 +80,12 @@ const DateInput = ({
 
     const handleClear = (e: React.MouseEvent) => {
         setNativeInputValue(nativeRef.current!, '');
+
         // keep popover closed
         e.preventDefault();
         e.stopPropagation();
+
+        nativeRef?.current?.focus();
     };
 
     const parsedDate = value ? parseDate(value) || undefined : undefined;
@@ -98,18 +101,14 @@ const DateInput = ({
             setIsPopoverOpen(false);
         }
 
-        triggerRef.current?.focus();
+        nativeRef.current?.focus();
     };
 
     return (
         <div className="relative">
             <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
                 <Popover.Trigger asChild>
-                    <Widget
-                        variant="button"
-                        disabled={disabled}
-                        className={className}
-                    >
+                    <Widget variant="button" disabled={disabled} className={className}>
                         <Widget.Content
                             className="ui-placeholder:text-neutral-400 ui-placeholder:font-normal"
                             data-placeholder={!value ? '' : undefined}
@@ -144,6 +143,20 @@ const DateInput = ({
                             )}
                             {controls}
                         </Widget.Controls>
+
+                        <Widget.Native>
+                            <input
+                                ref={mergeRefs(ref, nativeRef)}
+                                type="date"
+                                {...props}
+                                value={value}
+                                onChange={onChange}
+                                tabIndex={-1}
+                                onFocus={() => triggerRef.current?.focus()}
+                                disabled={disabled}
+                                required={required}
+                            />
+                        </Widget.Native>
                     </Widget>
                 </Popover.Trigger>
 
@@ -169,20 +182,6 @@ const DateInput = ({
                     />
                 </Popover.Content>
             </Popover>
-
-            <Widget.Native>
-                <input
-                    ref={mergeRefs(ref, nativeRef)}
-                    type="date"
-                    {...props}
-                    value={value}
-                    onChange={onChange}
-                    tabIndex={-1}
-                    onFocus={() => triggerRef.current?.focus()}
-                    disabled={disabled}
-                    required={required}
-                />
-            </Widget.Native>
         </div>
     );
 };

@@ -167,6 +167,15 @@ const DateInput = ({
                     onEscapeKeyDown={(e) => {
                         e.stopPropagation();
                     }}
+                    onOpenAutoFocus={(e) => {
+                        e.preventDefault();
+                    }}
+                    onCloseAutoFocus={(e) => {
+                        e.preventDefault();
+                    }}
+                    onFocusOutside={(e) => {
+                        e.preventDefault();
+                    }}
                 >
                     <Calendar
                         className="p-0"

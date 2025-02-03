@@ -190,6 +190,9 @@ const DateTimeInput = ({
 
                 <Popover.Content
                     className="w-auto min-w-min flex flex-col gap-4"
+                    onEscapeKeyDown={(e) => {
+                        e.stopPropagation();
+                    }}
                     onOpenAutoFocus={(e) => {
                         e.preventDefault();
                     }}

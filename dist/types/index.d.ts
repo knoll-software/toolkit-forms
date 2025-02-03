@@ -70,9 +70,9 @@ declare interface DecimalInputProps extends React_2.ComponentPropsWithRef<'input
 }
 
 export declare const Field: (({ className, ...props }: FieldRootProps) => JSX_2.Element) & {
-    Label: ({ className, ...props }: FieldLabelProps) => JSX_2.Element;
-    Error: ({ className, ...props }: FieldErrorProps) => JSX_2.Element;
-    HelpText: ({ className, ...props }: FieldHelpTextProps) => JSX_2.Element;
+    Label: ({ children, className, ...props }: FieldLabelProps) => JSX_2.Element;
+    Error: ({ children, className, ...props }: FieldErrorProps) => JSX_2.Element | null;
+    HelpText: ({ children, className, ...props }: FieldHelpTextProps) => JSX_2.Element | null;
 };
 
 declare interface FieldErrorProps extends React_2.ComponentPropsWithRef<'p'> {

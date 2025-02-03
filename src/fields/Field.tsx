@@ -3,6 +3,7 @@ import TextInput from '../widgets/TextInput.tsx';
 import * as React from 'react';
 import { useEffect, useId } from 'react';
 import { mergeRefs } from '@nicoknoll/utils';
+import isErrorValue from '../utils/isErrorValue.ts';
 
 export interface FieldProps<T> {
     // field component props
@@ -43,24 +44,34 @@ interface FieldLabelProps extends React.ComponentPropsWithRef<'label'> {
     required?: boolean;
 }
 
-const FieldLabel = ({ className, ...props }: FieldLabelProps) => {
+const FieldLabel = ({ children, className, ...props }: FieldLabelProps) => {
     return (
         <label className={classnames('text-sm font-medium', className)} {...props}>
-            {props.children} {props.required && <span className="text-red-500">*</span>}
+            {children} {props.required && <span className="text-red-500">*</span>}
         </label>
     );
 };
 
 interface FieldErrorProps extends React.ComponentPropsWithRef<'p'> {}
 
-const FieldError = ({ className, ...props }: FieldErrorProps) => {
-    return <p className={classnames('text-sm text-error-500 whitespace-pre-line', className)} {...props} />;
+const FieldError = ({ children, className, ...props }: FieldErrorProps) => {
+    if (!children) return null;
+    return (
+        <p className={classnames('text-sm text-error-500 whitespace-pre-line', className)} {...props}>
+            {children}
+        </p>
+    );
 };
 
 interface FieldHelpTextProps extends React.ComponentPropsWithRef<'p'> {}
 
-const FieldHelpText = ({ className, ...props }: FieldHelpTextProps) => {
-    return <p className={classnames('text-sm text-neutral-500', className)} {...props} />;
+const FieldHelpText = ({ children, className, ...props }: FieldHelpTextProps) => {
+    if (!children) return null;
+    return (
+        <p className={classnames('text-sm text-neutral-500', className)} {...props}>
+            {children}
+        </p>
+    );
 };
 
 interface SimpleFieldProps<T> extends FieldProps<T> {
@@ -84,8 +95,8 @@ export const SimpleField = <T,>({ ref, label, error, helpText, widget, className
     return (
         <FieldRoot
             className={className}
-            data-error={error != null ? error || '' : undefined}
-            data-invalid={error != null ? '' : undefined}
+            data-error={isErrorValue(error) ? error || '' : undefined}
+            data-invalid={isErrorValue(error) ? '' : undefined}
         >
             {label && (
                 <FieldLabel required={props.required} htmlFor={props.id || id}>
@@ -95,7 +106,7 @@ export const SimpleField = <T,>({ ref, label, error, helpText, widget, className
 
             <Dynamic component={widget || TextInput} {...props} ref={mergeRefs(inputRef, ref)} id={props.id || id} />
 
-            {error != null ? (
+            {isErrorValue(error) ? (
                 <FieldError>{(error as any)?.message || error || ''}</FieldError>
             ) : (
                 helpText && <FieldHelpText>{helpText}</FieldHelpText>

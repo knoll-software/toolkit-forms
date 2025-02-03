@@ -13,6 +13,7 @@ import {
 import isMultipleSelect from '../utils/isMultipleSelect.ts';
 import { Slot } from '@radix-ui/react-slot';
 import { Slottable } from '../widgets/Select.tsx';
+import isErrorValue from '../utils/isErrorValue.ts';
 
 interface FormProps<TFieldValues extends FieldValues = FieldValues>
     extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {
@@ -116,7 +117,7 @@ const FormError = ({
     } = useFormContext();
     const error: FieldError = errors?.[name] as FieldError;
     const Comp = asChild ? Slot : 'div';
-    return error != null ? <Comp {...props} data-error={error?.message || ''} /> : null;
+    return isErrorValue(error) ? <Comp {...props} data-error={error?.message || ''} /> : null;
 };
 
 const FormErrorMessage = ({ name = 'root' }: { name?: string }) => {
@@ -124,7 +125,7 @@ const FormErrorMessage = ({ name = 'root' }: { name?: string }) => {
         formState: { errors },
     } = useFormContext();
     const error: FieldError = errors?.[name] as FieldError;
-    return error != null ? error?.message || '' : null;
+    return isErrorValue(error) ? error?.message || '' : null;
 };
 
 export default Object.assign(Form, {

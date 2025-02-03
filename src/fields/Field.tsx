@@ -1,4 +1,4 @@
-import {classnames, Dynamic} from '@nicoknoll/utils';
+import { classnames, Dynamic } from '@nicoknoll/utils';
 import TextInput from '../widgets/TextInput.tsx';
 import * as React from 'react';
 import { useEffect, useId } from 'react';
@@ -82,7 +82,11 @@ export const SimpleField = <T,>({ ref, label, error, helpText, widget, className
     }, [error]);
 
     return (
-        <FieldRoot className={className} data-error={error ? error : undefined} data-invalid={error ? '' : undefined}>
+        <FieldRoot
+            className={className}
+            data-error={error != null ? error || '' : undefined}
+            data-invalid={error != null ? '' : undefined}
+        >
             {label && (
                 <FieldLabel required={props.required} htmlFor={props.id || id}>
                     {label}
@@ -91,8 +95,8 @@ export const SimpleField = <T,>({ ref, label, error, helpText, widget, className
 
             <Dynamic component={widget || TextInput} {...props} ref={mergeRefs(inputRef, ref)} id={props.id || id} />
 
-            {error ? (
-                <FieldError>{(error as any)?.message || error}</FieldError>
+            {error != null ? (
+                <FieldError>{(error as any)?.message || error || ''}</FieldError>
             ) : (
                 helpText && <FieldHelpText>{helpText}</FieldHelpText>
             )}

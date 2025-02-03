@@ -139,9 +139,9 @@ export declare const Form: (<TFieldValues extends FieldValues = FieldValues>({ c
     Error: ({ asChild, name, ...props }: React_2.ComponentPropsWithRef<"div"> & Slottable_2 & {
         name?: string;
     }) => JSX_2.Element | null;
-    ErrorMessage: ({ name, ...props }: React_2.ComponentPropsWithRef<"span"> & Slottable_2 & {
+    ErrorMessage: ({ name }: {
         name?: string;
-    }) => string | null | undefined;
+    }) => string | null;
 };
 
 declare interface FormFieldProps extends Omit<ControllerProps, 'render'> {

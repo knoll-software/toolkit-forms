@@ -7649,11 +7649,19 @@ const _i = qt("X", [
   const u = Cv(), d = J.useRef(null);
   return ct(() => {
     d.current && d.current.setCustomValidity(n || "");
-  }, [n]), /* @__PURE__ */ v.jsxs(Yv, { className: o, "data-error": n || void 0, "data-invalid": n ? "" : void 0, children: [
-    t && /* @__PURE__ */ v.jsx(qv, { required: l.required, htmlFor: l.id || u, children: t }),
-    /* @__PURE__ */ v.jsx(Fv, { component: a || Uv, ...l, ref: nn(d, e), id: l.id || u }),
-    n ? /* @__PURE__ */ v.jsx(Kv, { children: (n == null ? void 0 : n.message) || n }) : r && /* @__PURE__ */ v.jsx(Gv, { children: r })
-  ] });
+  }, [n]), /* @__PURE__ */ v.jsxs(
+    Yv,
+    {
+      className: o,
+      "data-error": n != null ? n || "" : void 0,
+      "data-invalid": n != null ? "" : void 0,
+      children: [
+        t && /* @__PURE__ */ v.jsx(qv, { required: l.required, htmlFor: l.id || u, children: t }),
+        /* @__PURE__ */ v.jsx(Fv, { component: a || Uv, ...l, ref: nn(d, e), id: l.id || u }),
+        n != null ? /* @__PURE__ */ v.jsx(Kv, { children: (n == null ? void 0 : n.message) || n || "" }) : r && /* @__PURE__ */ v.jsx(Gv, { children: r })
+      ]
+    }
+  );
 }, ts = Object.assign(Yv, {
   Label: qv,
   Error: Kv,
@@ -23431,15 +23439,12 @@ const uB = ({
   const {
     formState: { errors: r }
   } = Ti(), a = r == null ? void 0 : r[t], o = e ? Tt : "div";
-  return a ? /* @__PURE__ */ v.jsx(o, { ...n, "data-error": a.message }) : null;
-}, pB = ({
-  name: e = "root",
-  ...t
-}) => {
+  return a != null ? /* @__PURE__ */ v.jsx(o, { ...n, "data-error": (a == null ? void 0 : a.message) || "" }) : null;
+}, pB = ({ name: e = "root" }) => {
   const {
-    formState: { errors: n }
-  } = Ti(), r = n == null ? void 0 : n[e];
-  return r ? r.message : null;
+    formState: { errors: t }
+  } = Ti(), n = t == null ? void 0 : t[e];
+  return n != null ? (n == null ? void 0 : n.message) || "" : null;
 }, MB = Object.assign(uB, {
   Field: cB,
   Button: dB,

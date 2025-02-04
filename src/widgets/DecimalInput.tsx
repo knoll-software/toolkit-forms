@@ -32,8 +32,8 @@ const DecimalInput = ({
 }: DecimalInputProps & WidgetProps) => {
     const nativeRef = useRef<HTMLInputElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const [value, onChange] = useWidgetState('', props.value, props.onChange);
-    const stringValue = value?.toString();
+    const [widgetValue, onChange] = useWidgetState('', props.value, props.onChange);
+    const stringValue = widgetValue != null ? widgetValue?.toString() : '';
 
     const normalizeValue = (value: string) => {
         if (value === '' || value === undefined || value === null) {
@@ -49,17 +49,23 @@ const DecimalInput = ({
         }
 
         // validate min and max
-        if (min !== undefined && parseFloat(normalizedValue) < parseFloat(min.toString())) {
+        if (min != null && parseFloat(normalizedValue) < parseFloat(min.toString())) {
             normalizedValue = min.toString();
         }
-        if (max !== undefined && parseFloat(normalizedValue) > parseFloat(max.toString())) {
+        if (max != null && parseFloat(normalizedValue) > parseFloat(max.toString())) {
             normalizedValue = max.toString();
         }
 
         // make sure it has the right number of decimal places
-        normalizedValue = parseFloat(normalizedValue).toFixed(decimalPlaces);
+        // Split into integer and decimal parts
+        const [integerPart, decimalPart = ''] = normalizedValue.split('.');
 
-        return normalizedValue;
+        // Pad or truncate decimal part to match decimalPlaces
+        const formattedDecimal = decimalPart
+            .padEnd(decimalPlaces, '0') // Pad with zeros if shorter
+            .slice(0, decimalPlaces); // Truncate if longer
+
+        return decimalPlaces > 0 ? `${integerPart}${decimalSeparator}${formattedDecimal}` : integerPart;
     };
 
     useEffect(() => {
@@ -67,7 +73,7 @@ const DecimalInput = ({
         if (nativeRef.current && normalizedValue !== stringValue) {
             setNativeInputValue(nativeRef.current, normalizedValue);
         }
-    }, [props.value]);
+    }, [stringValue]);
 
     const handleClear = () => {
         setNativeInputValue(inputRef.current!, '');
@@ -75,6 +81,8 @@ const DecimalInput = ({
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+
         const inputValue = e.target.value;
 
         const regex = decimalPlaces > 0 ? DECIMAL_REGEX : INTEGER_REGEX;
@@ -121,12 +129,12 @@ const DecimalInput = ({
                 <input
                     ref={inputRef}
                     className={classnames(
-                        'px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400',
+                        'px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums',
                         inputClassName
                     )}
                     {...props}
                     onBlur={handleBlur}
-                    value={value?.toString()}
+                    value={stringValue}
                     onChange={handleChange}
                 />
             </Widget.Content>
@@ -134,7 +142,7 @@ const DecimalInput = ({
             <Widget.Controls>
                 {controls}
 
-                {value && !hideClear && (
+                {widgetValue && !hideClear && (
                     <Widget.ControlButton onClick={handleClear}>
                         <XIcon />
                     </Widget.ControlButton>
@@ -144,7 +152,7 @@ const DecimalInput = ({
             <Widget.Native>
                 <input
                     ref={mergeRefs(ref, nativeRef)}
-                    value={value?.toString()}
+                    value={stringValue}
                     onChange={onChange}
                     tabIndex={-1}
                     onFocus={() => inputRef.current?.focus()}

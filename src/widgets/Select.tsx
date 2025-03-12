@@ -725,17 +725,20 @@ const SelectNative = ({ ref, ...props }: SelectNativeProps) => {
 
     const { multiple, options, selected, required } = useContext(SelectContext)!;
 
+    console.warn('SelectNative', { multiple, options, selected, required }, JSON.parse(JSON.stringify(options)));
+
     return (
         <select {...props} tabIndex={-1} multiple={multiple} ref={mergeRefs(nativeRef, ref)}>
             {!required && <option value="" disabled={false} />}
 
-            {selected && (Array.isArray(selected) ? selected : [selected]).map((selectedValue: string) => {
-                return (
-                    <option key={selectedValue} value={selectedValue} selected>
-                        {selectedValue}
-                    </option>
-                );
-            })}
+            {selected &&
+                (Array.isArray(selected) ? selected : [selected]).map((selectedValue: string) => {
+                    return (
+                        <option key={selectedValue} value={selectedValue} selected>
+                            {selectedValue}
+                        </option>
+                    );
+                })}
 
             {options
                 ?.filter((o) => !selected.includes(o.value))

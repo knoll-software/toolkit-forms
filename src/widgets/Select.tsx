@@ -739,9 +739,13 @@ const SelectNative = ({ ref, ...props }: SelectNativeProps) => {
                 })}
 
             {options
-                ?.filter((o) => {
-                    console.log(JSON.parse(JSON.stringify(o)));
-                    return !selected || Array.isArray(selected) ? !selected.includes(o.value) : selected !== o.value;
+                ?.filter((op) => {
+                    console.log(JSON.parse(JSON.stringify(op)));
+                    console.log(!selected);
+                    console.log(Array.isArray(selected));
+                    console.log(!selected.includes(op.value));
+                    console.log(selected !== op.value);
+                    return !selected || Array.isArray(selected) ? !selected.includes(op.value) : selected !== op.value;
                 })
                 .map((option) => {
                     const textLabel =

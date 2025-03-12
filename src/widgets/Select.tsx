@@ -739,9 +739,10 @@ const SelectNative = ({ ref, ...props }: SelectNativeProps) => {
                 })}
 
             {options
-                ?.filter((o) =>
-                    !selected || Array.isArray(selected) ? !selected.includes(o.value) : selected !== o.value
-                )
+                ?.filter((o) => {
+                    console.log(JSON.parse(JSON.stringify(o)));
+                    return !selected || Array.isArray(selected) ? !selected.includes(o.value) : selected !== o.value;
+                })
                 .map((option) => {
                     const textLabel =
                         typeof option.label === 'string' ? option.label : renderToString(option.label || '');

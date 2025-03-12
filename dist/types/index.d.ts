@@ -57,7 +57,7 @@ export declare const DateInput: ({ ref, controls, className, calendarProps, plac
 
 export declare const DateTimeField: (props: FieldProps<string> & default_2.ComponentPropsWithRef<typeof DateTimeInput>) => JSX_2.Element;
 
-export declare const DateTimeInput: ({ ref, controls, className, calendarProps, placeholder, emptyButtonLabel, searchPlaceholder, hideClear, disabled, required, ...props }: DateFieldProps & WidgetProps) => JSX_2.Element;
+export declare const DateTimeInput: ({ ref, controls, className, calendarProps, placeholder, emptyButtonLabel, searchPlaceholder, hideClear, disabled, required, locale, ...props }: DateFieldProps & WidgetProps) => JSX_2.Element;
 
 export declare const DecimalField: (props: FieldProps<number> & default_2.ComponentPropsWithRef<typeof DecimalInput>) => JSX_2.Element;
 

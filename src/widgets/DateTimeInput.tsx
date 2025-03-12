@@ -7,9 +7,13 @@ import Calendar from './Calendar.tsx';
 import * as chrono from 'chrono-node';
 import { classnames, mergeRefs } from '@nicoknoll/utils';
 import setNativeInputValue from '../utils/setNativeInputValue.ts';
-import { DateFieldProps } from './DateInput.tsx';
+import { DateFieldProps, DateSegment } from './DateInput.tsx';
 import TimeInput from './TimeInput.tsx';
 import Button from '../misc/Button.tsx';
+import { createCalendar, getLocalTimeZone, parseAbsolute, ZonedDateTime } from '@internationalized/date';
+import { useDateFieldState } from '@react-stately/datepicker';
+import { useDateField } from '@react-aria/datepicker';
+import { Granularity } from '@react-types/datepicker';
 
 // Function to parse a date string into a Date object
 const parseDate = (str: Date | string): Date | null => {
@@ -24,21 +28,6 @@ const formatDate = (date: Date | string): string => {
     return new Date(date).toISOString();
 };
 
-const displayDate = (date: Date | string): string => {
-    // Date -> DD.MM.YYYY, HH:MM
-    if (date?.toString() === 'Invalid Date' || date === '') return '';
-
-    return new Date(date).toLocaleDateString('de-DE', {
-        // zero padded
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-    });
-};
-
 const DateTimeInput = ({
     ref,
     controls,
@@ -50,10 +39,11 @@ const DateTimeInput = ({
     hideClear,
     disabled,
     required,
+    locale = 'de',
     ...props
 }: DateFieldProps & WidgetProps) => {
     const nativeRef = useRef<HTMLInputElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
     const timeRef = useRef<HTMLInputElement>(null);
 
@@ -64,6 +54,10 @@ const DateTimeInput = ({
         setIsPopoverOpen(open);
 
         if (!open) {
+            if (!value) {
+                fieldState.setValue(null);
+                setMonth(new Date());
+            }
             setTimeout(() => nativeRef.current?.focus(), 0);
         }
     };
@@ -72,6 +66,8 @@ const DateTimeInput = ({
 
     const handleClear = (e: React.MouseEvent) => {
         setNativeInputValue(nativeRef.current!, '');
+        fieldState.setValue(null);
+        setMonth(new Date());
 
         // keep popover closed
         e.preventDefault();
@@ -133,26 +129,56 @@ const DateTimeInput = ({
         ? new Date(value).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
         : '';
 
+    const dateFieldProps = {
+        'aria-label': 'date',
+        isDisabled: disabled,
+        isRequired: required,
+        onFocus: () => {
+            if (disabled) return;
+            handlePopoverOpenChange(true);
+        },
+        onChange: (value: ZonedDateTime | null) => {
+            if (disabled) return;
+            if (nativeRef.current) {
+                setNativeInputValue(nativeRef.current, value ? formatDate(value.toDate()) : '');
+            }
+        },
+        value: value ? parseAbsolute(value, getLocalTimeZone()) : null,
+        granularity: 'second' as Granularity,
+        hideTimeZone: true,
+    };
+
+    let fieldState = useDateFieldState({
+        ...dateFieldProps,
+        locale,
+        createCalendar,
+    });
+
+    let { fieldProps } = useDateField(dateFieldProps, fieldState, triggerRef);
+
     return (
         <div className="relative">
-            <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange} modal={isPopoverOpen}>
+            <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange} modal={false}>
                 <Popover.Trigger asChild>
-                    <Widget variant="button" disabled={disabled} className={className}>
-                        <Widget.Content
-                            className="ui-placeholder:text-neutral-400 ui-placeholder:font-normal"
-                            data-placeholder={!value ? '' : undefined}
-                            asChild
-                        >
-                            <button
+                    <Widget disabled={disabled} className={className}>
+                        <Widget.Content asChild>
+                            <div
+                                {...fieldProps}
                                 ref={triggerRef}
-                                className="px-2 py-1.5 pr-0 cursor-default !outline-none"
-                                disabled={disabled}
-                                type="button"
+                                className="select-none px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums"
                             >
-                                <span className="min-h-5 block min-w-16">
-                                    {value ? displayDate(value) : placeholder}
-                                </span>
-                            </button>
+                                {fieldState.segments.map((segment, i) => {
+                                    const previousSegment = fieldState.segments[i - 1];
+                                    return (
+                                        <DateSegment
+                                            key={i}
+                                            segment={segment}
+                                            state={fieldState}
+                                            isPreviousEmpty={!previousSegment || previousSegment.isPlaceholder}
+                                        />
+                                    );
+                                })}
+                            </div>
                         </Widget.Content>
 
                         <Widget.Controls>
@@ -180,7 +206,7 @@ const DateTimeInput = ({
                                 value={value}
                                 onChange={onChange}
                                 tabIndex={-1}
-                                // onFocus={() => triggerRef.current?.focus()}
+                                onFocus={() => triggerRef.current?.focus()}
                                 disabled={disabled}
                                 required={required}
                             />
@@ -190,6 +216,8 @@ const DateTimeInput = ({
 
                 <Popover.Content
                     className="w-auto min-w-min flex flex-col gap-4"
+                    align="start"
+                    ref={popoverRef}
                     onEscapeKeyDown={(e) => {
                         e.stopPropagation();
                     }}
@@ -202,8 +230,6 @@ const DateTimeInput = ({
                     onFocusOutside={(e) => {
                         e.preventDefault();
                     }}
-                    align="start"
-                    ref={popoverRef}
                 >
                     <Calendar
                         className="p-0"

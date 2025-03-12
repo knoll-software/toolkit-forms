@@ -45,11 +45,9 @@ export interface DateFieldProps extends React.ComponentPropsWithRef<'input'> {
     hideClear?: boolean;
 }
 
-const DateSegment = ({ segment, state, isPreviousEmpty }: any) => {
+export const DateSegment = ({ segment, state, isPreviousEmpty }: any) => {
     let ref = React.useRef(null);
     let { segmentProps } = useDateSegment(segment, state, ref);
-
-    // const [isFocused, setIsFocused] = React.useState(false);
 
     const now = new Date();
 
@@ -70,8 +68,6 @@ const DateSegment = ({ segment, state, isPreviousEmpty }: any) => {
     return (
         <span
             {...segmentProps}
-            // onFocus={mergeEventHandlers(segmentProps.onFocus, () => setIsFocused(true))}
-            // onBlur={mergeEventHandlers(segmentProps.onBlur, () => setIsFocused(false))}
             style={{
                 ...segmentProps.style,
                 minWidth: segment.maxValue != null ? String(segment.maxValue).length + 'ch' : undefined,
@@ -177,7 +173,7 @@ const DateInput = ({
 
     return (
         <div className="relative">
-            <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
+            <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange} modal={false}>
                 <Popover.Trigger asChild>
                     <Widget disabled={disabled} className={className}>
                         <Widget.Content asChild>
@@ -197,7 +193,6 @@ const DateInput = ({
                                         />
                                     );
                                 })}
-                                {fieldState.isInvalid && <span aria-hidden="true">🚫</span>}
                             </div>
                         </Widget.Content>
 

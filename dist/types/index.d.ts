@@ -47,12 +47,13 @@ declare interface DateFieldProps extends React_2.ComponentPropsWithRef<'input'> 
     defaultValue?: string;
     value?: string;
     calendarProps?: React_2.ComponentPropsWithRef<typeof Calendar>;
+    locale?: string;
     emptyButtonLabel?: string;
     searchPlaceholder?: string;
     hideClear?: boolean;
 }
 
-export declare const DateInput: ({ ref, controls, className, calendarProps, placeholder, emptyButtonLabel, searchPlaceholder, hideClear, disabled, required, ...props }: DateFieldProps & WidgetProps) => JSX_2.Element;
+export declare const DateInput: ({ ref, controls, className, calendarProps, placeholder, emptyButtonLabel, searchPlaceholder, hideClear, disabled, required, locale, ...props }: DateFieldProps & WidgetProps) => JSX_2.Element;
 
 export declare const DateTimeField: (props: FieldProps<string> & default_2.ComponentPropsWithRef<typeof DateTimeInput>) => JSX_2.Element;
 

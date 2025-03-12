@@ -10,7 +10,8 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "playground": "cd playground && npm run dev"
   },
   "files": [
     "dist"
@@ -20,10 +21,14 @@
     "react-dom": ">=19.0.0 <20.0.0-0"
   },
   "dependencies": {
+    "@internationalized/date": "^3.7.0",
     "@nicoknoll/forms": "github:knoll-software/toolkit-forms",
     "@nicoknoll/utils": "github:knoll-software/toolkit-utils",
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@react-aria/datepicker": "^3.14.1",
+    "@react-stately/calendar": "^3.7.1",
+    "@react-stately/datepicker": "^3.13.0",
     "chrono-node": "^2.7.6",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",

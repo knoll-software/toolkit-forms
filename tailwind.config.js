@@ -4,7 +4,11 @@ const plugin = require('tailwindcss/plugin');
 const colors = require('tailwindcss/colors');
 
 export default {
-    content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
+    content: [
+        './src/**/*.{html,js,jsx,ts,tsx}',
+        '../src/**/*.{html,js,jsx,ts,tsx}',
+        './playground/src/**/*.{js,jsx,ts,tsx}',
+    ],
     theme: {
         extend: {
             boxShadow: {

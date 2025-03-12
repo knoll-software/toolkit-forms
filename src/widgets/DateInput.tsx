@@ -7,6 +7,14 @@ import Calendar from './Calendar.tsx';
 import * as chrono from 'chrono-node';
 import { classnames, mergeRefs } from '@nicoknoll/utils';
 import setNativeInputValue from '../utils/setNativeInputValue.ts';
+import {
+    CalendarDate,
+    createCalendar,
+    getLocalTimeZone,
+    parseDate as parseCalendarDate,
+} from '@internationalized/date';
+import { useDateField, useDateSegment } from '@react-aria/datepicker';
+import { useDateFieldState } from '@react-stately/datepicker';
 
 // Function to parse a date string into a Date object
 const parseDate = (str: Date | string): Date | null => {
@@ -25,28 +33,59 @@ const formatDate = (date: Date | string): string => {
     return localISOTime?.split('T')?.[0] || '';
 };
 
-const displayDate = (date: Date | string): string => {
-    // Date -> DD.MM.YYYY
-    if (date?.toString() === 'Invalid Date' || date === '') return '';
-
-    return new Date(date).toLocaleDateString('de-DE', {
-        // zero padded
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-    });
-};
-
 export interface DateFieldProps extends React.ComponentPropsWithRef<'input'> {
     defaultValue?: string;
     value?: string;
     calendarProps?: React.ComponentPropsWithRef<typeof Calendar>;
+    locale?: string;
 
     emptyButtonLabel?: string;
     searchPlaceholder?: string;
 
     hideClear?: boolean;
 }
+
+const DateSegment = ({ segment, state, isPreviousEmpty }: any) => {
+    let ref = React.useRef(null);
+    let { segmentProps } = useDateSegment(segment, state, ref);
+
+    // const [isFocused, setIsFocused] = React.useState(false);
+
+    const now = new Date();
+
+    let displayValue = segment.text;
+
+    if (segment.type == 'day') {
+        displayValue = (segment.isPlaceholder ? now.getDate().toString() : segment.text).padStart(2, '0');
+    }
+
+    if (segment.type == 'month') {
+        displayValue = (segment.isPlaceholder ? (now.getMonth() + 1).toString() : segment.text).padStart(2, '0');
+    }
+
+    if (segment.type == 'year') {
+        displayValue = (segment.isPlaceholder ? now.getFullYear().toString() : segment.text).padStart(4, '0');
+    }
+
+    return (
+        <span
+            {...segmentProps}
+            // onFocus={mergeEventHandlers(segmentProps.onFocus, () => setIsFocused(true))}
+            // onBlur={mergeEventHandlers(segmentProps.onBlur, () => setIsFocused(false))}
+            style={{
+                ...segmentProps.style,
+                minWidth: segment.maxValue != null ? String(segment.maxValue).length + 'ch' : undefined,
+            }}
+            ref={ref}
+            className={classnames(
+                'select-none text-right tabular-nums outline-none focus:bg-theme-100',
+                segment.isPlaceholder || (segment.type === 'literal' && isPreviousEmpty) ? 'text-neutral-300' : ''
+            )}
+        >
+            {displayValue}
+        </span>
+    );
+};
 
 const DateInput = ({
     ref,
@@ -59,10 +98,11 @@ const DateInput = ({
     hideClear,
     disabled,
     required,
+    locale = 'de',
     ...props
 }: DateFieldProps & WidgetProps) => {
     const nativeRef = useRef<HTMLInputElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
 
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -72,6 +112,10 @@ const DateInput = ({
         setIsPopoverOpen(open);
 
         if (!open) {
+            if (!value) {
+                fieldState.setValue(null);
+                setMonth(new Date());
+            }
             setTimeout(() => nativeRef.current?.focus(), 0);
         }
     };
@@ -80,6 +124,8 @@ const DateInput = ({
 
     const handleClear = (e: React.MouseEvent) => {
         setNativeInputValue(nativeRef.current!, '');
+        fieldState.setValue(null);
+        setMonth(new Date());
 
         // keep popover closed
         e.preventDefault();
@@ -104,26 +150,55 @@ const DateInput = ({
         nativeRef.current?.focus();
     };
 
+    const dateFieldProps = {
+        'aria-label': 'date',
+        isDisabled: disabled,
+        isRequired: required,
+        onFocus: () => {
+            if (disabled) return;
+            handlePopoverOpenChange(true);
+        },
+        onChange: (value: CalendarDate | null) => {
+            if (disabled) return;
+            if (nativeRef.current) {
+                setNativeInputValue(nativeRef.current, value ? formatDate(value.toDate(getLocalTimeZone())) : '');
+            }
+        },
+        value: value ? parseCalendarDate(value) : null,
+    };
+
+    let fieldState = useDateFieldState({
+        ...dateFieldProps,
+        locale,
+        createCalendar,
+    });
+
+    let { fieldProps } = useDateField(dateFieldProps, fieldState, triggerRef);
+
     return (
         <div className="relative">
             <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
                 <Popover.Trigger asChild>
-                    <Widget variant="button" disabled={disabled} className={className}>
-                        <Widget.Content
-                            className="ui-placeholder:text-neutral-400 ui-placeholder:font-normal"
-                            data-placeholder={!value ? '' : undefined}
-                            asChild
-                        >
-                            <button
+                    <Widget disabled={disabled} className={className}>
+                        <Widget.Content asChild>
+                            <div
+                                {...fieldProps}
                                 ref={triggerRef}
-                                className="px-2 py-1.5 pr-0 cursor-default !outline-none"
-                                disabled={disabled}
-                                type="button"
+                                className="select-none px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums"
                             >
-                                <span className="min-h-5 block min-w-16">
-                                    {value ? displayDate(value) : placeholder}
-                                </span>
-                            </button>
+                                {fieldState.segments.map((segment, i) => {
+                                    const previousSegment = fieldState.segments[i - 1];
+                                    return (
+                                        <DateSegment
+                                            key={i}
+                                            segment={segment}
+                                            state={fieldState}
+                                            isPreviousEmpty={!previousSegment || previousSegment.isPlaceholder}
+                                        />
+                                    );
+                                })}
+                                {fieldState.isInvalid && <span aria-hidden="true">🚫</span>}
+                            </div>
                         </Widget.Content>
 
                         <Widget.Controls>

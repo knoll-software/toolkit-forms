@@ -16812,10 +16812,12 @@ const db = /* @__PURE__ */ el(X4), Xr = ee.createContext(void 0), Z4 = ({
   };
 }, cW = ({ ref: e, ...t }) => {
   const n = qe(null), { multiple: r, options: a, selected: o, required: l } = Yt(Xr);
-  return console.warn("SelectNative", { multiple: r, options: a, selected: o, required: l }, JSON.parse(JSON.stringify(a))), /* @__PURE__ */ v.jsxs("select", { ...t, tabIndex: -1, multiple: r, ref: nn(n, e), children: [
+  return /* @__PURE__ */ v.jsxs("select", { ...t, tabIndex: -1, multiple: r, ref: nn(n, e), children: [
     !l && /* @__PURE__ */ v.jsx("option", { value: "", disabled: !1 }),
     o && (Array.isArray(o) ? o : [o]).map((u) => /* @__PURE__ */ v.jsx("option", { value: u, selected: !0, children: u }, u)),
-    a == null ? void 0 : a.filter((u) => !o.includes(u.value)).map((u) => {
+    a == null ? void 0 : a.filter(
+      (u) => !o || Array.isArray(o) ? !o.includes(u.value) : o !== u.value
+    ).map((u) => {
       const d = typeof u.label == "string" ? u.label : Dv(u.label || "");
       return /* @__PURE__ */ v.jsx("option", { value: u.value, children: d }, u.value);
     })

@@ -2,18 +2,18 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import Widget, { useWidgetState, WidgetProps } from './Widget.tsx';
 import Popover from '../misc/Popover.tsx';
-import { ChevronDownIcon, ClockIcon, XIcon } from 'lucide-react';
+import { ChevronDownIcon, XIcon } from 'lucide-react';
 import Calendar from './Calendar.tsx';
 import * as chrono from 'chrono-node';
-import { classnames, mergeRefs } from '@nicoknoll/utils';
+import { classnames, mergeEventHandlers, mergeRefs, useControllableState } from '@nicoknoll/utils';
 import setNativeInputValue from '../utils/setNativeInputValue.ts';
 import { DateFieldProps, DateSegment } from './DateInput.tsx';
-import TimeInput from './TimeInput.tsx';
 import Button from '../misc/Button.tsx';
 import { createCalendar, getLocalTimeZone, parseAbsolute, ZonedDateTime } from '@internationalized/date';
 import { useDateFieldState } from '@react-stately/datepicker';
 import { useDateField } from '@react-aria/datepicker';
 import { Granularity } from '@react-types/datepicker';
+import { range } from 'lodash';
 
 // Function to parse a date string into a Date object
 const parseDate = (str: Date | string): Date | null => {
@@ -28,6 +28,11 @@ const formatDate = (date: Date | string): string => {
     return new Date(date).toISOString();
 };
 
+interface DateTimeInputProps extends DateFieldProps {
+    hoursLabel?: string;
+    minutesLabel?: string;
+}
+
 const DateTimeInput = ({
     ref,
     controls,
@@ -40,8 +45,10 @@ const DateTimeInput = ({
     disabled,
     required,
     locale = 'de',
+    hoursLabel = 'Stunden',
+    minutesLabel = 'Minuten',
     ...props
-}: DateFieldProps & WidgetProps) => {
+}: DateTimeInputProps & WidgetProps) => {
     const nativeRef = useRef<HTMLInputElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
@@ -53,12 +60,19 @@ const DateTimeInput = ({
 
         setIsPopoverOpen(open);
 
-        if (!open) {
-            if (!value) {
-                fieldState.setValue(null);
-                setMonth(new Date());
-            }
-            setTimeout(() => nativeRef.current?.focus(), 0);
+        if (!open && !value) {
+            fieldState.setValue(null);
+            setMonth(new Date());
+        }
+    };
+
+    const handleBlur = (e: any) => {
+        if (
+            !triggerRef.current?.contains(e.relatedTarget) &&
+            !popoverRef.current?.contains(e.relatedTarget) &&
+            isPopoverOpen
+        ) {
+            handlePopoverOpenChange(false);
         }
     };
 
@@ -78,7 +92,11 @@ const DateTimeInput = ({
 
     const parsedDate = value ? parseDate(value) || undefined : undefined;
 
-    const [month, setMonth] = useState<Date>(parsedDate || new Date());
+    const [month, setMonth] = useControllableState<Date>(
+        parsedDate || new Date(),
+        calendarProps?.month,
+        calendarProps?.onMonthChange
+    );
     useEffect(() => {
         if (parsedDate) setMonth(parsedDate);
     }, [value]);
@@ -99,36 +117,6 @@ const DateTimeInput = ({
         }
     };
 
-    const handleTimeChange = (e: any) => {
-        const newDate = value ? new Date(value) : new Date();
-        const [hour, minute, second] = e.target.value.split(':');
-
-        newDate.setHours(parseInt(hour));
-        newDate.setMinutes(parseInt(minute));
-        newDate.setSeconds(parseInt(second));
-
-        if (nativeRef.current) {
-            setNativeInputValue(nativeRef.current, newDate ? formatDate(newDate) : '');
-        }
-    };
-
-    const handleClockButtonClick = () => {
-        const newDate = value ? new Date(value) : new Date();
-        const now = new Date();
-
-        newDate.setHours(now.getHours());
-        newDate.setMinutes(now.getMinutes());
-        newDate.setSeconds(now.getSeconds());
-
-        if (nativeRef.current) {
-            setNativeInputValue(nativeRef.current, newDate ? formatDate(newDate) : '');
-        }
-    };
-
-    const timeValue = value
-        ? new Date(value).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-        : '';
-
     const dateFieldProps = {
         'aria-label': 'date',
         isDisabled: disabled,
@@ -144,7 +132,7 @@ const DateTimeInput = ({
             }
         },
         value: value ? parseAbsolute(value, getLocalTimeZone()) : null,
-        granularity: 'second' as Granularity,
+        granularity: 'minute' as Granularity,
         hideTimeZone: true,
     };
 
@@ -154,7 +142,7 @@ const DateTimeInput = ({
         createCalendar,
     });
 
-    let { fieldProps } = useDateField(dateFieldProps, fieldState, triggerRef);
+    let { fieldProps, labelProps } = useDateField(dateFieldProps, fieldState, triggerRef);
 
     return (
         <div className="relative">
@@ -164,6 +152,8 @@ const DateTimeInput = ({
                         <Widget.Content asChild>
                             <div
                                 {...fieldProps}
+                                onClick={mergeEventHandlers(labelProps.onClick, fieldProps.onClick)}
+                                onBlur={mergeEventHandlers(handleBlur, fieldProps.onBlur)}
                                 ref={triggerRef}
                                 className="select-none px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums"
                             >
@@ -215,10 +205,11 @@ const DateTimeInput = ({
                 </Popover.Trigger>
 
                 <Popover.Content
-                    className="w-auto min-w-min flex flex-col gap-4"
+                    className="w-auto min-w-min flex gap-4"
                     align="start"
                     ref={popoverRef}
                     onEscapeKeyDown={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                     }}
                     onOpenAutoFocus={(e) => {
@@ -232,30 +223,87 @@ const DateTimeInput = ({
                     }}
                 >
                     <Calendar
-                        className="p-0"
                         mode="single"
-                        month={month}
-                        onMonthChange={(date) => setMonth(date)}
-                        selected={parsedDate}
-                        // @ts-ignore
-                        onSelect={handleDateSelect}
                         fixedWeeks
                         showOutsideDays
                         {...calendarProps}
+                        // @ts-ignore
+                        onSelect={handleDateSelect}
+                        selected={parsedDate}
+                        className={classnames('px-0 py-2', calendarProps?.className)}
+                        month={month}
+                        onMonthChange={(date) => setMonth(date)}
                     />
 
-                    <div className="flex items-stretch justify-center gap-1 bg-neutral-50 p-3 rounded">
-                        <Button variant="ghost" onClick={handleClockButtonClick} className="px-2 !text-theme-500">
-                            <ClockIcon />
-                        </Button>
+                    <div className="flex flex-col items-stretch justify-center gap-4 bg-neutral-50 p-3 rounded">
+                        <div className="flex flex-col gap-1">
+                            <label className="font-medium text-sm mb-0.5 -mt-1">{hoursLabel}</label>
+                            {range(0, 4).map((column) => (
+                                <div className="flex gap-1">
+                                    {range(column * 6, (column + 1) * 6).map((hour) => (
+                                        <Button
+                                            key={hour}
+                                            className={classnames(
+                                                'flex-1',
+                                                (value ? new Date(value).getHours() === hour : false) &&
+                                                    'bg-theme-600 text-white hover:bg-theme-600 !border-transparent'
+                                            )}
+                                            onClick={() => {
+                                                const newDate = value ? new Date(value) : new Date();
+                                                newDate.setHours(hour);
+                                                newDate.setSeconds(0);
 
-                        <TimeInput
-                            value={timeValue}
-                            onChange={handleTimeChange}
-                            name="time"
-                            ref={timeRef}
-                            className="w-48 px-1.5"
-                        />
+                                                if (nativeRef.current) {
+                                                    setNativeInputValue(
+                                                        nativeRef.current,
+                                                        newDate ? formatDate(newDate) : ''
+                                                    );
+                                                }
+
+                                                timeRef.current?.focus();
+                                            }}
+                                        >
+                                            {hour.toString().padStart(2, '0')}
+                                        </Button>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <label className="font-medium text-sm mb-0.5 -mt-1">{minutesLabel}</label>
+
+                            {range(0, 2).map((column) => (
+                                <div className="flex gap-1">
+                                    {range(column * 30, (column + 1) * 30, 5).map((minute) => (
+                                        <Button
+                                            key={minute}
+                                            className={classnames(
+                                                'flex-1',
+                                                (value ? new Date(value).getMinutes() === minute : false) &&
+                                                    'bg-theme-600 text-white hover:bg-theme-600 !border-transparent'
+                                            )}
+                                            onClick={() => {
+                                                const newDate = value ? new Date(value) : new Date();
+                                                newDate.setMinutes(minute);
+                                                newDate.setSeconds(0);
+
+                                                if (nativeRef.current) {
+                                                    setNativeInputValue(
+                                                        nativeRef.current,
+                                                        newDate ? formatDate(newDate) : ''
+                                                    );
+                                                }
+
+                                                timeRef.current?.focus();
+                                            }}
+                                        >
+                                            {minute.toString().padStart(2, '0')}
+                                        </Button>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </Popover.Content>
             </Popover>

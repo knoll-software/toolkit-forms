@@ -5,7 +5,7 @@ import Popover from '../misc/Popover.tsx';
 import { ChevronDownIcon, XIcon } from 'lucide-react';
 import Calendar from './Calendar.tsx';
 import * as chrono from 'chrono-node';
-import { classnames, mergeRefs } from '@nicoknoll/utils';
+import { classnames, mergeEventHandlers, mergeRefs, useControllableState } from '@nicoknoll/utils';
 import setNativeInputValue from '../utils/setNativeInputValue.ts';
 import {
     CalendarDate,
@@ -65,12 +65,29 @@ export const DateSegment = ({ segment, state, isPreviousEmpty }: any) => {
         displayValue = (segment.isPlaceholder ? now.getFullYear().toString() : segment.text).padStart(4, '0');
     }
 
+    if (segment.type == 'hour') {
+        displayValue = (segment.isPlaceholder ? now.getHours().toString() : segment.text).padStart(2, '0');
+    }
+
+    if (segment.type == 'minute') {
+        displayValue = (segment.isPlaceholder ? now.getMinutes().toString() : segment.text).padStart(2, '0');
+    }
+
+    if (segment.type == 'second') {
+        displayValue = (segment.isPlaceholder ? now.getSeconds().toString() : segment.text).padStart(2, '0');
+    }
+
     return (
         <span
             {...segmentProps}
             style={{
                 ...segmentProps.style,
                 minWidth: segment.maxValue != null ? String(segment.maxValue).length + 'ch' : undefined,
+            }}
+            onClick={(e) => {
+                e.stopPropagation();
+                // @ts-ignore
+                return segmentProps.onClick?.(e);
             }}
             ref={ref}
             className={classnames(
@@ -107,12 +124,19 @@ const DateInput = ({
 
         setIsPopoverOpen(open);
 
-        if (!open) {
-            if (!value) {
-                fieldState.setValue(null);
-                setMonth(new Date());
-            }
-            setTimeout(() => nativeRef.current?.focus(), 0);
+        if (!open && !value) {
+            fieldState.setValue(null);
+            setMonth(new Date());
+        }
+    };
+
+    const handleBlur = (e: any) => {
+        if (
+            !triggerRef.current?.contains(e.relatedTarget) &&
+            !popoverRef.current?.contains(e.relatedTarget) &&
+            isPopoverOpen
+        ) {
+            handlePopoverOpenChange(false);
         }
     };
 
@@ -132,7 +156,11 @@ const DateInput = ({
 
     const parsedDate = value ? parseDate(value) || undefined : undefined;
 
-    const [month, setMonth] = useState<Date>(parsedDate || new Date());
+    const [month, setMonth] = useControllableState<Date>(
+        parsedDate || new Date(),
+        calendarProps?.month,
+        calendarProps?.onMonthChange
+    );
     useEffect(() => {
         if (parsedDate) setMonth(parsedDate);
     }, [value]);
@@ -169,7 +197,7 @@ const DateInput = ({
         createCalendar,
     });
 
-    let { fieldProps } = useDateField(dateFieldProps, fieldState, triggerRef);
+    let { fieldProps, labelProps } = useDateField(dateFieldProps, fieldState, triggerRef);
 
     return (
         <div className="relative">
@@ -179,6 +207,8 @@ const DateInput = ({
                         <Widget.Content asChild>
                             <div
                                 {...fieldProps}
+                                onClick={mergeEventHandlers(labelProps.onClick, fieldProps.onClick)}
+                                onBlur={mergeEventHandlers(handleBlur, fieldProps.onBlur)}
                                 ref={triggerRef}
                                 className="select-none px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums"
                             >
@@ -235,6 +265,7 @@ const DateInput = ({
                     align="start"
                     ref={popoverRef}
                     onEscapeKeyDown={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                     }}
                     onOpenAutoFocus={(e) => {
@@ -248,16 +279,16 @@ const DateInput = ({
                     }}
                 >
                     <Calendar
-                        className="p-0"
                         mode="single"
-                        month={month}
-                        onMonthChange={(date) => setMonth(date)}
-                        selected={parsedDate}
-                        // @ts-ignore
-                        onSelect={handleDateSelect}
                         fixedWeeks
                         showOutsideDays
                         {...calendarProps}
+                        // @ts-ignore
+                        onSelect={handleDateSelect}
+                        selected={parsedDate}
+                        className={classnames('p-0', calendarProps?.className)}
+                        month={month}
+                        onMonthChange={(date) => setMonth(date)}
                     />
                 </Popover.Content>
             </Popover>

@@ -17,6 +17,7 @@ import {
 import { Option } from '@/widgets/Select.tsx';
 import { Form } from '@/forms';
 import Button from '@/misc/Button.tsx';
+import TimeField from '@/fields/TimeField.tsx';
 
 const PasswordInput = (props: TextInputProps) => {
     const [visible, setVisible] = useState(false);
@@ -145,7 +146,6 @@ const Full = (props: any) => {
     const [month, setMonth] = useState<Date | undefined>(undefined);
 
     const [testIntegerValue, setTestIntegerValue] = useState<string | undefined>(undefined);
-
     return (
         <div className="w-full flex justify-center">
             <div className="flex flex-col gap-16 max-w-[800px] w-full">
@@ -174,6 +174,15 @@ const Full = (props: any) => {
                         // @ts-ignore
                         value={testIntegerValue}
                         onChange={(e) => setTestIntegerValue(e.target.value)}
+                    />
+
+                    <TimeField
+                        label="Time"
+                        required
+                        {...sharedProps}
+                        // @ts-ignore
+                        // value={testTimeValue}
+                        // onChange={(e) => setTestTimeValue(e.target.value)}
                     />
 
                     <DateTimeField

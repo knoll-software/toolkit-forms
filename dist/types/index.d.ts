@@ -57,7 +57,12 @@ export declare const DateInput: ({ ref, controls, className, calendarProps, plac
 
 export declare const DateTimeField: (props: FieldProps<string> & default_2.ComponentPropsWithRef<typeof DateTimeInput>) => JSX_2.Element;
 
-export declare const DateTimeInput: ({ ref, controls, className, calendarProps, placeholder, emptyButtonLabel, searchPlaceholder, hideClear, disabled, required, locale, ...props }: DateFieldProps & WidgetProps) => JSX_2.Element;
+export declare const DateTimeInput: ({ ref, controls, className, calendarProps, placeholder, emptyButtonLabel, searchPlaceholder, hideClear, disabled, required, locale, hoursLabel, minutesLabel, ...props }: DateTimeInputProps & WidgetProps) => JSX_2.Element;
+
+declare interface DateTimeInputProps extends DateFieldProps {
+    hoursLabel?: string;
+    minutesLabel?: string;
+}
 
 export declare const DecimalField: (props: FieldProps<number> & default_2.ComponentPropsWithRef<typeof DecimalInput>) => JSX_2.Element;
 
@@ -274,11 +279,13 @@ declare interface TextInputProps extends React_2.ComponentPropsWithRef<'input'> 
     inputClassName?: string;
 }
 
-export declare const TimeInput: ({ ref, className, inputClassName, disabled, readOnly, required, name, hideSeconds, ...props }: TimeInputProps) => JSX_2.Element;
+export declare const TimeInput: ({ ref, controls, className, inputClassName, hideClear, disabled, readOnly, required, name, showSeconds, locale, ...props }: TimeInputProps & WidgetProps) => JSX_2.Element;
 
 declare interface TimeInputProps extends default_2.ComponentPropsWithRef<'input'> {
-    hideSeconds?: boolean;
+    showSeconds?: boolean;
     inputClassName?: string;
+    locale?: string;
+    hideClear?: boolean;
 }
 
 export declare const ToggleButton: ({ options, name, className, disabled, required, ...props }: SingleSelectProps & {

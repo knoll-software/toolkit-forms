@@ -279,6 +279,8 @@ declare interface TextInputProps extends React_2.ComponentPropsWithRef<'input'> 
     inputClassName?: string;
 }
 
+export declare const TimeField: (props: FieldProps<string> & default_2.ComponentPropsWithRef<typeof TimeInput>) => JSX_2.Element;
+
 export declare const TimeInput: ({ ref, controls, className, inputClassName, hideClear, disabled, readOnly, required, name, showSeconds, locale, ...props }: TimeInputProps & WidgetProps) => JSX_2.Element;
 
 declare interface TimeInputProps extends default_2.ComponentPropsWithRef<'input'> {

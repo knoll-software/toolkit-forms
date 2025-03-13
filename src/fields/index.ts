@@ -11,3 +11,4 @@ export { default as MultiSelectField } from './MultiSelectField';
 export { default as SelectField } from './SelectField';
 export { default as StringField } from './StringField';
 export { default as TextField } from './TextField';
+export { default as TimeField } from './TimeField';

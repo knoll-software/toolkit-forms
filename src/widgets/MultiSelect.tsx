@@ -196,7 +196,7 @@ const MultiSelect = ({
 
                                     <Select.Search
                                         ref={searchRef}
-                                        className="!outline-none absolute w-full top-0 left-0 p-1 py-0.5 text-sm placeholder:text-neutral-400 bg-transparent"
+                                        className="!outline-none absolute w-full top-0 left-0 p-1 py-0.5 text-sm placeholder:text-neutral-400 bg-transparent outline-none"
                                         placeholder={placeholder}
                                         disabled={selectProps.disabled}
                                     />

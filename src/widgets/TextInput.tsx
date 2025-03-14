@@ -33,7 +33,7 @@ const TextInput = ({
                 <input
                     ref={mergeRefs(inputRef, ref)}
                     className={classnames(
-                        'px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400',
+                        'px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 outline-none',
                         inputClassName
                     )}
                     {...props}

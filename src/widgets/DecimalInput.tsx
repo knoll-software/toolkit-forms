@@ -129,7 +129,7 @@ const DecimalInput = ({
                 <input
                     ref={inputRef}
                     className={classnames(
-                        'px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums',
+                        'px-2 py-1.5 flex-1 min-w-0 bg-transparent placeholder:text-neutral-400 tabular-nums outline-none',
                         inputClassName
                     )}
                     {...props}

@@ -12,7 +12,6 @@ export { default as DateTimeInput } from './DateTimeInput';
 export { default as FileInput } from './FileInput';
 export { default as HiddenInput } from './HiddenInput';
 export { default as IntegerInput } from './IntegerInput';
-export { default as MemorableDateInput } from './MemorableDateInput';
 export { default as MultiSelect } from './MultiSelect';
 export { default as Radio } from './Radio';
 export { default as RadioGroup } from './RadioGroup';

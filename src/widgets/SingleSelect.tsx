@@ -177,12 +177,7 @@ export const SingleSelect = ({
             >
                 <Popover.Anchor>
                     <Select.Trigger asChild>
-                        <Widget
-                            variant="button"
-                            disabled={selectProps.disabled}
-                            ref={widgetRef}
-                            className={className}
-                        >
+                        <Widget variant="button" disabled={selectProps.disabled} ref={widgetRef} className={className}>
                             <Widget.Content asChild>
                                 <button
                                     ref={triggerRef}
@@ -246,7 +241,7 @@ export const SingleSelect = ({
 
                             <Widget variant="input" asChild disabled={selectProps.disabled}>
                                 <Select.Search
-                                    className="rounded px-2 py-1 !pl-7 bg-transparent w-full min-w-0"
+                                    className="rounded px-2 py-1 !pl-7 bg-transparent w-full min-w-0 outline-none"
                                     placeholder={searchPlaceholder}
                                     ref={searchRef}
                                 />

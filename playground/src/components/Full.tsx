@@ -2,7 +2,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextInputProps } from '@/widgets/FileInput.tsx';
-import { CheckboxGroup, MemorableDateInput, RadioGroup, Switch, TextInput, ToggleButton, Widget } from '@/widgets';
+import { CheckboxGroup, RadioGroup, Switch, TextInput, ToggleButton, Widget } from '@/widgets';
 import {
     BooleanField,
     DateField,
@@ -294,7 +294,7 @@ const Full = (props: any) => {
                     </Form.Field>
 
                     <Form.Field name="birthday">
-                        <DateField label="Birthday" widget={MemorableDateInput} {...sharedProps} />
+                        <DateField label="Birthday" {...sharedProps} />
                     </Form.Field>
 
                     <Form.Field name="age">
@@ -397,7 +397,7 @@ const Full = (props: any) => {
 
                     <DateField label="Date" id="uncontrolled-date" required {...sharedProps} />
 
-                    <DateField label="Birthday" widget={MemorableDateInput} {...sharedProps} />
+                    <DateField label="Birthday" {...sharedProps} />
 
                     <IntegerField label="Age" required {...sharedProps} />
 

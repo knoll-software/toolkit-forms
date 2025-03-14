@@ -186,11 +186,6 @@ declare interface IntegerInputProps extends React_2.ComponentPropsWithRef<'input
     inputClassName?: string;
 }
 
-export declare const MemorableDateInput: ({ ref, className, disabled, readOnly, required, name, ...props }: MemorableDateProps) => JSX_2.Element;
-
-declare interface MemorableDateProps extends default_2.ComponentPropsWithRef<'input'> {
-}
-
 export declare const MultiSelect: ({ widgetRef, controls, options, defaultOpen: propsDefaultOpen, open: propsOpen, onOpenChange: propsOnOpenChange, allowAddOption, onAddOption, placeholder, value: propsValue, onChange: propsOnChange, onFocus: propsOnFocus, ...selectProps }: MultiSelectProps & WidgetProps) => JSX_2.Element;
 
 export declare const MultiSelectField: (props: FieldProps<string[]> & default_2.ComponentPropsWithRef<typeof MultiSelect>) => JSX_2.Element;

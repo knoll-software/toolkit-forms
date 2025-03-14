@@ -15,7 +15,7 @@ const TextArea = ({ inputClassName, className, controls, widgetRef, ref, ...prop
                 <textarea
                     ref={ref}
                     className={classnames(
-                        'px-2 py-1.5 flex-1 min-w-0 min-h-[3lh] bg-transparent',
+                        'px-2 py-1.5 flex-1 min-w-0 min-h-[3lh] bg-transparent outline-none',
                         props.disabled && 'resize-none',
                         inputClassName
                     )}

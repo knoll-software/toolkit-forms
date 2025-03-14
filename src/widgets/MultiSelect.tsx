@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useContext, useRef } from 'react';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { useControllableState } from '@nicoknoll/utils';
-import Select, { Option, SelectContext, Slottable, useSelectNative } from './Select.tsx';
-import { Slot } from '@radix-ui/react-slot';
+import Select, { Option, SelectContext, useSelectNative } from './Select.tsx';
 import Widget, { useWidgetState, WidgetProps } from './Widget.tsx';
 import { classnames } from '@nicoknoll/utils';
 import Popover from '../misc/Popover.tsx';
+import Slot, { Slottable } from '../misc/Slot.tsx';
 
 interface TagProps extends React.ComponentPropsWithRef<'span'> {
     children: React.ReactNode;

@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useContext } from 'react';
 import { classnames } from '@nicoknoll/utils';
 import { ButtonProps } from '../misc/Button.tsx';
-import { Slot } from '@radix-ui/react-slot';
-import { Slottable } from './Select.tsx';
 import { useControllableState } from '@nicoknoll/utils';
 import isMultipleSelect from '../utils/isMultipleSelect.ts';
 import { FieldElement } from 'react-hook-form';
+
+import Slot, { Slottable } from '../misc/Slot.tsx';
 
 export interface WidgetProps {
     controls?: React.ReactNode;
@@ -46,7 +46,7 @@ const WidgetRoot = ({
             <Comp
                 className={classnames(
                     'shadow-inner-sm placeholder:text-neutral-400',
-                    'border border-solid outline-transparent border-neutral-300 bg-white text-sm text-neutral-900 transition-colors duration-200',
+                    'border border-solid outline-transparent border-neutral-300 bg-white text-sm text-neutral-900 transition-colors duration-200 outline-offset-0',
 
                     !disabled && 'hover:border-neutral-400',
                     !disabled && 'ui-invalid:border-error-500',

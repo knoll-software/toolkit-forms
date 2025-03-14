@@ -1,11 +1,10 @@
 import { classnames } from '@nicoknoll/utils';
 import { useControllableState } from '@nicoknoll/utils';
-import { Slottable } from '../widgets/Select.tsx';
 import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
 import { useLayoutEffect, useState } from 'react';
 import { mergeRefs } from '@nicoknoll/utils';
 import { LoaderIcon } from 'lucide-react';
+import Slot, { Slottable } from './Slot.tsx';
 
 export interface ButtonProps extends Omit<React.ComponentPropsWithRef<'button'>, 'onClick'>, Slottable {
     active?: boolean;

@@ -25,7 +25,6 @@
     "@nicoknoll/forms": "github:knoll-software/toolkit-forms",
     "@nicoknoll/utils": "github:knoll-software/toolkit-utils",
     "@radix-ui/react-popover": "^1.1.1",
-    "@radix-ui/react-slot": "^1.1.0",
     "@react-aria/datepicker": "^3.14.1",
     "@react-stately/calendar": "^3.7.1",
     "@react-stately/datepicker": "^3.13.0",

@@ -1,15 +1,11 @@
 import * as React from 'react';
 import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { mergeEventHandlers, mergeProps, mergeRefs, useControllableState } from '@nicoknoll/utils';
-import { Slot } from '@radix-ui/react-slot';
 import { useMultipleSelection, useSelect } from 'downshift';
 import { renderToString } from 'react-dom/server';
 import { setNativeSelectValue } from '../utils/setNativeInputValue.ts';
 import isEqual from 'lodash/isEqual';
-
-export interface Slottable {
-    asChild?: true;
-}
+import Slot, { Slottable } from '../misc/Slot.tsx';
 
 export interface Option {
     value: string;

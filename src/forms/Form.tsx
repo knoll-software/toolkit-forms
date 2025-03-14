@@ -11,9 +11,9 @@ import {
     UseFormReturn,
 } from 'react-hook-form';
 import isMultipleSelect from '../utils/isMultipleSelect.ts';
-import { Slot } from '@radix-ui/react-slot';
-import { Slottable } from '../widgets/Select.tsx';
 import isErrorValue from '../utils/isErrorValue.ts';
+
+import Slot, { Slottable } from '../misc/Slot.tsx';
 
 interface FormProps<TFieldValues extends FieldValues = FieldValues>
     extends Omit<React.ComponentPropsWithRef<'form'>, 'onSubmit'> {

@@ -81,7 +81,24 @@ interface SimpleFieldProps<T> extends FieldProps<T> {
     [key: string]: any;
 }
 
-export const SimpleField = <T,>({ ref, label, error, helpText, widget, className, ...props }: SimpleFieldProps<T>) => {
+const getTextFromReactNode = (node: React.ReactNode): string => {
+    if (!node) return '';
+    if (typeof node === 'string' || typeof node === 'number') return String(node);
+    if (Array.isArray(node)) return node.map(getTextFromReactNode).join('');
+    if (React.isValidElement(node) && node.props.children) return getTextFromReactNode(node.props.children);
+    return '';
+};
+
+export const SimpleField = <T,>({
+    ref,
+    label,
+    error,
+    helpText,
+    widget,
+    className,
+    placeholder,
+    ...props
+}: SimpleFieldProps<T>) => {
     const id = useId();
 
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -104,7 +121,13 @@ export const SimpleField = <T,>({ ref, label, error, helpText, widget, className
                 </FieldLabel>
             )}
 
-            <Dynamic component={widget || TextInput} {...props} ref={mergeRefs(inputRef, ref)} id={props.id || id} />
+            <Dynamic
+                component={widget || TextInput}
+                {...props}
+                placeholder={placeholder != null ? placeholder : getTextFromReactNode(label)}
+                ref={mergeRefs(inputRef, ref)}
+                id={props.id || id}
+            />
 
             {isErrorValue(error) ? (
                 <FieldError>{(error as any)?.message || error || ''}</FieldError>

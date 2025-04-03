@@ -92,7 +92,7 @@ export const DateSegment = ({ segment, state, isPreviousEmpty }: any) => {
             ref={ref}
             className={classnames(
                 'select-none text-right tabular-nums outline-none focus:bg-theme-100',
-                segment.isPlaceholder || (segment.type === 'literal' && isPreviousEmpty) ? 'text-neutral-300' : ''
+                segment.isPlaceholder || (segment.type === 'literal' && isPreviousEmpty) ? 'text-neutral-400' : ''
             )}
         >
             {displayValue}
@@ -285,6 +285,7 @@ const DateInput = ({
                         {...calendarProps}
                         // @ts-ignore
                         onSelect={handleDateSelect}
+                        // @ts-ignore
                         selected={parsedDate}
                         className={classnames('p-0', calendarProps?.className)}
                         month={month}

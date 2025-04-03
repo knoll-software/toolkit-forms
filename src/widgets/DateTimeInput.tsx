@@ -229,6 +229,7 @@ const DateTimeInput = ({
                         {...calendarProps}
                         // @ts-ignore
                         onSelect={handleDateSelect}
+                        // @ts-ignore
                         selected={parsedDate}
                         className={classnames('px-0 py-2', calendarProps?.className)}
                         month={month}

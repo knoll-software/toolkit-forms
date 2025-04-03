@@ -36,7 +36,7 @@ const Calendar = ({
     return (
         <DayPicker
             locale={de}
-            captionLayout="dropdown-buttons"
+            captionLayout="dropdown"
             showOutsideDays={showOutsideDays}
             weekStartsOn={1}
             modifiersClassNames={mergeClassNames(defaultModifiersClassNames, modifiersClassNames)}
@@ -44,38 +44,43 @@ const Calendar = ({
             className={classnames('p-3', className)}
             classNames={mergeClassNames(
                 {
-                    months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-                    month: 'space-y-4',
-                    caption: 'flex justify-center pt-1 relative items-center',
+                    months: 'flex flex-col relative',
+                    month: 'space-y-4 relative',
+                    month_caption: 'flex justify-center font-medium text-sm h-9 relative items-center',
                     caption_label: 'text-sm font-medium',
-                    caption_dropdowns: 'flex items-center shadow-sm gap-1',
-                    nav: 'space-x-1 flex items-center',
-                    nav_button:
-                        'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-neutral-300 text-neutral-900 bg-background shadow-sm hover:bg-neutral-100 hover:text-neutral-800 hover:border-neutral-400 h-[2.175rem] w-7 bg-transparent p-0',
-                    nav_button_previous: 'absolute left-0.5',
-                    nav_button_next: 'absolute right-0.5',
-                    table: 'w-full border-collapse space-y-1',
-                    head_row: 'flex',
-                    head_cell: 'text-neutral-500 rounded-md w-9 font-normal text-[0.8rem]',
-                    row: 'flex w-full',
-                    cell: 'text-center text-sm p-0 relative [&:has([aria-selected])]:bg-neutral-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-                    day: 'm-px inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-100 hover:text-neutral-800 h-9 w-9 p-0 font-normal aria-selected:opacity-100',
-                    day_selected:
+                    dropdowns: 'flex items-center gap-1', // shadow-sm
+                    nav: 'space-x-1 flex items-center justify-between h-9 absolute z-10 w-full pointer-events-none px-0.5',
+                    button_previous:
+                        'pointer-events-auto inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-neutral-300 text-neutral-900 bg-background shadow-sm hover:bg-neutral-100 hover:text-neutral-800 hover:border-neutral-400 h-[2.175rem] w-7 bg-transparent p-0',
+                    button_next:
+                        'pointer-events-auto inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-neutral-300 text-neutral-900 bg-background shadow-sm hover:bg-neutral-100 hover:text-neutral-800 hover:border-neutral-400 h-[2.175rem] w-7 bg-transparent p-0',
+                    month_grid: 'w-full border-collapse space-y-1',
+                    weekdays: 'flex',
+                    weekday: 'text-neutral-500 rounded-md flex-1 font-normal text-[0.8rem]',
+                    week: 'flex w-full',
+                    day: 'text-center text-sm p-0 relative [&:has([aria-selected])]:bg-neutral-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
+                    day_button:
+                        'm-px inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-neutral-100 hover:text-neutral-800 h-9 w-9 p-0 font-normal aria-selected:opacity-100',
+                    selected:
                         '!bg-theme-600 !text-white hover:!bg-theme-600 hover:!text-white focus:!bg-theme-600 focus:!text-white rounded-md',
-                    day_today: 'text-theme-600 rounded-md underline decoration-2 underline-offset-4',
-                    day_outside: 'text-neutral-500 opacity-50',
-                    day_disabled: 'text-neutral-500 opacity-50',
-                    day_range_start: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-l-md',
-                    day_range_middle: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-none',
-                    day_range_end: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-r-md',
-                    day_hidden: 'invisible',
+                    today: 'text-theme-600 rounded-md underline decoration-2 underline-offset-4',
+                    outside: 'text-neutral-500 opacity-50',
+                    disabled: 'text-neutral-500 opacity-50',
+                    range_start: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-l-md',
+                    range_middle: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-none',
+                    range_end: 'aria-selected:bg-theme-600 aria-selected:text-white rounded-r-md',
+                    hidden: 'invisible',
                     vhidden: 'hidden',
                 },
                 classNames
             )}
             components={{
-                IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
-                IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
+                Chevron: (props) => {
+                    if (props.orientation === 'left') {
+                        return <ChevronLeftIcon className="h-4 w-4" {...props} />;
+                    }
+                    return <ChevronRightIcon className="h-4 w-4" {...props} />;
+                },
                 Dropdown: ({ ...props }) => {
                     const { name, onChange, value } = props;
                     return (
@@ -84,12 +89,12 @@ const Calendar = ({
                             onChange={onChange}
                             value={value?.toString()}
                             name={name}
-                            options={React.Children.map(props.children, (child: any) => {
-                                return {
-                                    value: child.props?.value.toString(),
-                                    label: child.props?.children,
-                                };
-                            })}
+                            options={
+                                props.options?.map((option) => ({
+                                    value: option.value.toString(),
+                                    label: option.label,
+                                })) || []
+                            }
                             required
                             hideSearch
                             hideCheck

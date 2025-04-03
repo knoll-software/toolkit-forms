@@ -17457,6 +17457,8 @@ const oC = /* @__PURE__ */ $p(ML), qa = se.createContext(void 0), IL = ({
       captionLayout: "dropdown",
       showOutsideDays: n,
       weekStartsOn: 1,
+      startMonth: new Date((/* @__PURE__ */ new Date()).getFullYear() - 5, (/* @__PURE__ */ new Date()).getMonth()),
+      endMonth: new Date((/* @__PURE__ */ new Date()).getFullYear() + 5, (/* @__PURE__ */ new Date()).getMonth()),
       modifiersClassNames: T$(c, o),
       modifiers: { ...l, ...a },
       className: Xe("p-3", e),

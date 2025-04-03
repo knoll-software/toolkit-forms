@@ -39,6 +39,9 @@ const Calendar = ({
             captionLayout="dropdown"
             showOutsideDays={showOutsideDays}
             weekStartsOn={1}
+            // default: +/- 5 years
+            startMonth={new Date(new Date().getFullYear() - 5, new Date().getMonth())}
+            endMonth={new Date(new Date().getFullYear() + 5, new Date().getMonth())}
             modifiersClassNames={mergeClassNames(defaultModifiersClassNames, modifiersClassNames)}
             modifiers={{ ...defaultModifiers, ...modifiers }}
             className={classnames('p-3', className)}

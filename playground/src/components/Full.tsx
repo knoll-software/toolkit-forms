@@ -113,12 +113,10 @@ const Full = (props: any) => {
 
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState(false);
-    const [placeholder, setPlaceholder] = useState(false);
 
     const sharedProps = {
         disabled,
         error: error ? 'This field is required' : undefined,
-        placeholder: placeholder ? 'Placeholder' : undefined,
     };
 
     useEffect(() => {
@@ -158,11 +156,6 @@ const Full = (props: any) => {
                     <label>
                         <input type="checkbox" onChange={(e) => setError(e.target.checked)} />
                         <span>Error</span>
-                    </label>
-
-                    <label>
-                        <input type="checkbox" onChange={(e) => setPlaceholder(e.target.checked)} />
-                        <span>Placeholder</span>
                     </label>
                 </div>
 
@@ -219,6 +212,17 @@ const Full = (props: any) => {
 
                         <button type="submit">Submit</button>
                     </form>
+
+                    <SelectField
+                        required
+                        label="Animals 2"
+                        options={dynamicOptions}
+                        {...sharedProps}
+                        value=""
+                        onChange={(e) => {
+                            setDynamicValue([e.target.value]);
+                        }}
+                    />
                 </div>
 
                 <Form
@@ -380,7 +384,7 @@ const Full = (props: any) => {
                     </Form.Field>
 
                     <Form.Field name="notes">
-                        <TextField {...sharedProps} />
+                        <TextField label="Notizen" {...sharedProps} />
                     </Form.Field>
 
                     <Button type="submit" loading={formMethods.formState.isSubmitting}>

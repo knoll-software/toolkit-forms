@@ -124,7 +124,7 @@ export const SimpleField = <T,>({
             <Dynamic
                 component={widget || TextInput}
                 {...props}
-                placeholder={placeholder != null ? placeholder : getTextFromReactNode(label)}
+                placeholder={placeholder != null ? getTextFromReactNode(placeholder) : getTextFromReactNode(label)}
                 ref={mergeRefs(inputRef, ref)}
                 id={props.id || id}
             />

@@ -411,6 +411,7 @@ const Full = (props: any) => {
                         // placeholder="Select a language..."
                         required
                         {...sharedProps}
+                        optionsNote="123"
                     />
 
                     <SelectField

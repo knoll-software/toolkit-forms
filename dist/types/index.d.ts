@@ -228,7 +228,7 @@ export declare const setNativeSelectValue: (select: HTMLSelectElement, value: st
 
 export declare const setNativeTextareaValue: (textarea: HTMLTextAreaElement, value: string) => void;
 
-export declare const SingleSelect: ({ widgetRef, controls, options, defaultOpen, open, onOpenChange, allowAddOption, onAddOption, placeholder, searchPlaceholder, emptyLabel, hideSearch, hideCheck, hideClear, className, value: propsValue, onChange: propsOnChange, onFocus: propsOnFocus, search: propsSearch, onSearchChange: propsOnSearchChange, ...selectProps }: SingleSelectProps & WidgetProps) => JSX_2.Element;
+export declare const SingleSelect: ({ widgetRef, controls, options, defaultOpen, open, onOpenChange, allowAddOption, onAddOption, placeholder, searchPlaceholder, emptyLabel, optionsNote, hideSearch, hideCheck, hideClear, className, value: propsValue, onChange: propsOnChange, onFocus: propsOnFocus, search: propsSearch, onSearchChange: propsOnSearchChange, ...selectProps }: SingleSelectProps & WidgetProps) => JSX_2.Element;
 
 declare interface SingleSelectProps extends React_2.ComponentPropsWithRef<'select'> {
     options: (Option_2 | [string, Option_2[]])[];
@@ -240,6 +240,7 @@ declare interface SingleSelectProps extends React_2.ComponentPropsWithRef<'selec
     placeholder?: string;
     searchPlaceholder?: string;
     emptyLabel?: string;
+    optionsNote?: React_2.ReactNode;
     hideSearch?: boolean;
     hideCheck?: boolean;
     hideClear?: boolean;

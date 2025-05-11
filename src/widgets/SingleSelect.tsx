@@ -53,6 +53,7 @@ export interface SingleSelectProps extends React.ComponentPropsWithRef<'select'>
     placeholder?: string;
     searchPlaceholder?: string;
     emptyLabel?: string;
+    optionsNote?: React.ReactNode;
 
     hideSearch?: boolean;
     hideCheck?: boolean;
@@ -84,6 +85,7 @@ export const SingleSelect = ({
     placeholder,
     searchPlaceholder,
     emptyLabel,
+    optionsNote,
 
     hideSearch = false,
     hideCheck = false,
@@ -297,6 +299,8 @@ export const SingleSelect = ({
 
                                 return <MemoSingleSelectOption key={option.value} {...option} hideCheck={hideCheck} />;
                             })}
+
+                            {optionsNote && <span className="text-sm text-neutral-400 px-2 py-1">{optionsNote}</span>}
                         </div>
                     </Select.Content>
                 </Popover.Content>

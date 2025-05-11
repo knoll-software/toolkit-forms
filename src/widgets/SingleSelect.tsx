@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { CheckIcon, ChevronsUpDownIcon, SearchIcon, XIcon } from 'lucide-react';
 import Popover from '../misc/Popover.tsx';
-import { classnames } from '@nicoknoll/utils';
+import { classnames, useControllableState } from '@nicoknoll/utils';
 import Widget, { useWidgetState, WidgetProps } from './Widget.tsx';
 import { setNativeSelectValue } from '../utils/setNativeInputValue.ts';
 
@@ -58,6 +58,9 @@ export interface SingleSelectProps extends React.ComponentPropsWithRef<'select'>
     hideCheck?: boolean;
     hideClear?: boolean;
 
+    search?: string;
+    onSearchChange?: (search?: string) => void;
+
     // select props
     value?: string;
     onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -93,6 +96,9 @@ export const SingleSelect = ({
     onChange: propsOnChange,
     onFocus: propsOnFocus,
 
+    search: propsSearch,
+    onSearchChange: propsOnSearchChange,
+
     ...selectProps
 }: SingleSelectProps & WidgetProps) => {
     const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -109,7 +115,7 @@ export const SingleSelect = ({
     const [value, onChange] = useWidgetState('', propsValue, propsOnChange);
 
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-    const [search, setSearch] = useState<string | undefined>('');
+    const [search, setSearch] = useControllableState<string | undefined>('', propsSearch, propsOnSearchChange);
 
     const handleOpenChange = (open: boolean | undefined) => {
         setIsPopoverOpen(!!open);

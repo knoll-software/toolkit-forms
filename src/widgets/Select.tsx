@@ -469,6 +469,8 @@ const SelectSearch = ({ asChild, ...props }: SelectSearchProps) => {
     const { getInputProps } = useContext(SelectContext)!;
     const inputProps = getInputProps();
 
+    console.log(inputProps);
+
     const Comp = asChild ? Slot : 'input';
     return <Comp {...mergeProps(inputProps, props)} />;
 };
